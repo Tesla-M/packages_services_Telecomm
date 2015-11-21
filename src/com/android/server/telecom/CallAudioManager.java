@@ -31,6 +31,8 @@ import android.os.SystemProperties;
 import android.os.ServiceManager;
 import android.os.UserHandle;
 import android.telecom.CallAudioState;
+import android.telecom.PhoneAccountHandle;
+import android.telephony.SubscriptionManager;
 
 import com.android.internal.util.IndentingPrintWriter;
 import com.android.internal.util.Preconditions;
@@ -128,6 +130,11 @@ final class CallAudioManager extends CallsManagerListenerBase
                 case MSG_AUDIO_MANAGER_SET_MODE: {
                     int newMode = msg.arg1;
                     int oldMode = mAudioManager.getMode();
+
+                    Call call = mCallsManager.getForegroundCall();
+                    boolean setMsimAudioParams = SystemProperties
+                            .getBoolean("ro.multisim.set_audio_params", false);
+
                     Log.v(this, "Request to change audio mode from %s to %s", modeToString(oldMode),
                             modeToString(newMode));
 
@@ -137,6 +144,17 @@ final class CallAudioManager extends CallsManagerListenerBase
                             Log.i(this, "Transition from IN_CALL -> RINGTONE."
                                     + "  Resetting to NORMAL first.");
                             mAudioManager.setMode(AudioManager.MODE_NORMAL);
+                        }
+
+                        if (call != null && setMsimAudioParams
+                                && newMode == AudioManager.MODE_IN_CALL) {
+                            int phoneId = getPhoneId(call);
+                            Log.d(this, "setAudioParameters phoneId=" + phoneId);
+                            if (phoneId == 0) {
+                                mAudioManager.setParameters("phone_type=cp1");
+                            } else if (phoneId == 1) {
+                                mAudioManager.setParameters("phone_type=cp2");
+                            }
                         }
                         mAudioManager.setMode(newMode);
                         synchronized (mLock) {
@@ -630,6 +648,7 @@ final class CallAudioManager extends CallsManagerListenerBase
             }
         }
         return -1;
+    }
 
     /**
      * Sets the audio mode.
