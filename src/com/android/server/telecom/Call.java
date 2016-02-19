@@ -434,9 +434,8 @@ public class Call implements CreateConnectionResponse {
             component = mConnectionService.getComponentName().flattenToShortString();
         }
 
-
-
-        return String.format(Locale.US, "[%s, %s, %s, %s, %s, childs(%d), has_parent(%b), [%s]]",
+        return String.format(Locale.US,
+                "[%s, %s, %s, %s, %s, childs(%d), has_parent(%b), [%s], %b, %s]",
                 System.identityHashCode(this),
                 CallState.toString(mState),
                 component,
@@ -444,7 +443,8 @@ public class Call implements CreateConnectionResponse {
                 getVideoStateDescription(getVideoState()),
                 getChildCalls().size(),
                 getParentCall() != null,
-                Connection.capabilitiesToString(getConnectionCapabilities()));
+                Connection.capabilitiesToString(getConnectionCapabilities()),
+                mIsActiveSub, mTargetPhoneAccountHandle);
     }
 
     /**
