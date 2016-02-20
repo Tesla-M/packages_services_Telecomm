@@ -443,8 +443,7 @@ public class Call implements CreateConnectionResponse {
                 getVideoStateDescription(getVideoState()),
                 getChildCalls().size(),
                 getParentCall() != null,
-                Connection.capabilitiesToString(getConnectionCapabilities()),
-                mIsActiveSub, mTargetPhoneAccountHandle);
+                Connection.capabilitiesToString(getConnectionCapabilities()));
     }
 
     /**
