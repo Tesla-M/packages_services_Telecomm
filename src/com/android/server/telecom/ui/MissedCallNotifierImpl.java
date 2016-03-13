@@ -341,9 +341,9 @@ public class MissedCallNotifierImpl extends CallsManagerListenerBase implements 
         mMissedCalls.clear();
 
 
-        if (sendNotificationCustomComponent(null, mMissedCallCount)) {
+        /* if (sendNotificationCustomComponent(null, mMissedCallCount)) {
             return;
-        }
+        } */
 
         long token = Binder.clearCallingIdentity();
         try {
