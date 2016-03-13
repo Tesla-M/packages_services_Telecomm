@@ -58,6 +58,7 @@ import android.telecom.PhoneAccount;
 import android.telephony.PhoneNumberUtils;
 import android.telephony.TelephonyManager;
 import android.text.BidiFormatter;
+import android.text.SpannableStringBuilder;
 import android.text.TextDirectionHeuristics;
 import android.text.TextUtils;
 import android.text.format.DateUtils;
@@ -218,7 +219,7 @@ public class MissedCallNotifierImpl extends CallsManagerListenerBase implements 
         final String callName = getNameForCall(call);
         // keep track of the call, keeping list sorted from newest to oldest
         mMissedCalls.add(0, new MissedCallInfo(callName,
-                    call.getNumber(), call.getCreationTimeMillis()));
+                    call.getPhoneNumber(), call.getCreationTimeMillis()));
 
         // Create a public viewable version of the notification, suitable for display when sensitive
         // notification content is hidden.
@@ -271,7 +272,7 @@ public class MissedCallNotifierImpl extends CallsManagerListenerBase implements 
             publicBuilder.setContentText(mContext.getText(R.string.notification_missedCallsTitle));
 
             Notification.InboxStyle style = new Notification.InboxStyle(builder);
-            String number = call.getNumber();
+            String number = call.getPhoneNumber();
 
             for (MissedCallInfo info : mMissedCalls) {
                 style.addLine(formatSingleCallLine(info.name, info.date));
