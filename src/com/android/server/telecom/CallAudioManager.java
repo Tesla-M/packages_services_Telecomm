@@ -29,6 +29,7 @@ import android.os.Message;
 import android.os.RemoteException;
 import android.os.SystemProperties;
 import android.os.ServiceManager;
+import android.os.SystemProperties;
 import android.os.UserHandle;
 import android.telecom.CallAudioState;
 import android.telecom.PhoneAccountHandle;
